@@ -17,7 +17,30 @@ Proxmox is a well known and vastelly documented software which has this exact fu
 
 That is the path I decided to follow, but I soon discovered it is not a particularly well lightened one. Although knowing it was possible to run Proxmox on a RBP, I struggled to find bits and pieces of information here and there on how to do it, while walking in the darkness and bumping into walls all the time. The knowledge available is sparse and spreaded out, without a proper body or context. This post is my attempt to clear and illuminate this approach, so those who come after may have a pleasant journey.
 
+# The Hardware
 
+I used on this guide a RPB 4 with 4GB of RAM as the server basis. It would be better to have used a RPB 5 with 8GB of RAM, or a RPB 4 with at least 8GB of RAM, however this was the hardware I had on hand now. In any case, the only thing necessary to later upgrade the setup with a RBP 4 to a RBP 5 is to swap one for the other.
+
+Despite the fact I started the whole process of installation with a SD card, it was not used for long, being replaced by a SSD drive soon later. Using a SSD as the main storage media for the server is mandatory. A SD card would not last long nor provide the necessary speed needed. Among several choices of external hard driver, I decided to use a 240GB SATA SSD with an USB to SATA adaptor. I got this particular model in the picture below.
 
 ![Sata to USB adaptor](/assets/images/ProxmoxInstalationOnRaspberryPi/SataToUsbCable.jpg)
+
+In summary, the hardware I was dealing with was:
+* Raspberry Pi 4 with 4GB of RAM
+* SD card large enough to hold a full installation of Raspberry Pi OS
+* SATA SSD with 240GB of capacity
+* USB 3.0 to SATA adaptor
+
+# Preparing the backgroung
+
+That was straightforward. I just open the latest version of Raspberry Pi Imager on my computer and copy the full version image with a desktop into the SD card. Once I had it up and running started the process by the ubiquitous:
+
+```bash
+sudo apt update && sudo apt -y full-upgrade
+```
+The next thing I did was to install GParted and mtools. This was needed to create and rearrange some partitions on the SSD and made it more suitable for the hyperviser.
+
+```bash
+sudo apt -y install gparted mtools
+```
 
