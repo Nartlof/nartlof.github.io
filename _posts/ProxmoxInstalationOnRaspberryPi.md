@@ -1,4 +1,3 @@
-
 ---
 title: How to install Proxmox on a Raspberry Pi SBC and put it to work
 date: 2024-08-26 9:37:00 -300
