@@ -4,6 +4,7 @@ date: 2024-08-26 9:37:00 -300
 categories: [proxmox, raspberry pi]
 tags: [proxmox, raspbian, raspos, homeserver]
 ---
+
 # Introduction
 
 Having a home server to run applications like ad-blockers and media centers is a must have. The Raspberry Pi (RBP) single board computer (SBC) is a cost effective way for achieving that and, in many cases, it is possible to run several services on the same hardware.  Unfortunately, some of those applications run better if left alone on their own hardware or can not run together with some other software for some particular conflict, let us say, the port 80 for example. In cases like that one is forced to have a second or third piece of equipment to accomplish the desired goal.
@@ -19,3 +20,4 @@ That is the path I decided to follow, but I soon discovered it is not a particul
 
 
 ![Sata to USB adaptor](/assets/images/ProxmoxInstalationOnRaspberryPi/SataToUsbCable.jpg)
+
