@@ -90,9 +90,9 @@ Now the driver was _uas_. The SSD is identified as a mass storage device and the
 
 I am convinced that it is a hardware related problem or something with the USB bus driver of the RBP 4 and 5. The same SD card inserted on a RBP 3 gives the correct driver. Fortunately, the solution was quite easy. I just had to tell the RBP to use the correct driver, but first I had to discover which one it was. For that I use the command ```lsusb``` again, but this time without any parameters.
 
-´´´bash
+```bash
 lsusb
-´´´
+```
 
 And there it was on the first line.
 
@@ -112,9 +112,10 @@ usb-storage.quirks=152d:0578:u console=serial0,115200 console=tty1 root=PARTUUID
 
 Then I saved the file and rebooted the system.
 
-´´´bash
+```bash
 sudo reboot
-´´´
+```
+
 After the system was loaded again I repeated the ```lsusb -t``` command with the expected result.
 
 ![Result of the lsusb command on a RBP 4 after the usb-storage.quirks command](/assets/images/ProxmoxInstalationOnRaspberryPi/lsusb--t-rbp4B.jpg)
@@ -135,9 +136,9 @@ sudo mount /dev/sda1 /mnt
 
 I had to adjust the cmdlint.txt file on the SSD or it would fail at boot due to the wrong driver. This time, in order to edit the file, I typed:
 
-´´´bash
+```bash
 sudo nano /mnt/cmdline.txt
-´´´
+```
 
 And again made the same modification, including ```usb-storage.quirks=152d:0578:u``` at the beginning of the file, just like before, then saved and exited. It was time to ```umount``` that partition.
 
@@ -175,7 +176,7 @@ Finely, I clicked on Apply All Operations, which is the little button with a gre
 
 ![Second warning from GParted](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted07.jpg)
 
-I did not have nor would ever have a Windows system coexisting with Raspberry Pi OS, so this is another warning that was safe to ignore. The process finally started and soon enough it was concluded. 
+I did not have nor would ever have a Windows system coexisting with Raspberry Pi OS, so this is another warning that was safe to ignore and click OK. The process finally started and soon enough it was concluded. 
 
 ![Applying changes](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted08.jpg)
 
