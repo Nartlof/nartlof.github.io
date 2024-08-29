@@ -15,9 +15,9 @@ When we were restricted to the RBP 3 or RBP 3+, it was not a big deal. They were
 
 This scenario changed with the advent of the Raspberry Pi 4 and 5, which could have up to 8GB of RAM, a more capable processor and USB 3 connectivity, also with a not so friendly price tag. Having a bunch of those running idle most of the time in our homelab is a waste. In this new context we must run our applications on containers and virtual machines that reside on this new and much more capable hardware. 
 
-Proxmox is a well known and vastelly documented software which has this exact function. It is a hypervisor. With it we can create virtual machines and containers to run applications in complete isolation from each other on the same hardware. It is powerful enough to even host itself or other hypervisor, allowing the creation of virtual machines inside virtual machines.
+Proxmox is a well known and vastly documented software which has this exact function. It is a hypervisor. With it we can create virtual machines and containers to run applications in complete isolation from each other on the same hardware. It is powerful enough to even host itself or other hypervisores, allowing the creation of virtual machines inside virtual machines.
 
-That is the path I decided to follow, but I soon discovered it is not a particularly well lightened one. Although knowing it was possible to run Proxmox on a RBP, I struggled to find bits and pieces of information here and there on how to do it, while walking in the darkness and bumping into walls all the time. The knowledge available is sparse and spreaded out, without a proper body or context. This post is my attempt to clear and illuminate this approach, so those who come after may have a pleasant journey.
+That is the path I decided to follow, but I soon discovered it is not a particularly well lit one. Although knowing it was possible to run Proxmox on a RBP, I struggled to find bits and pieces of information here and there on how to do it, while walking in the darkness and bumping into walls all the time. The knowledge available is sparse and spread out, without a proper body or context. This post is my attempt to clear and illuminate this approach, so those who come after may have a pleasant journey.
 
 ### Things I assume you already know
 
@@ -32,9 +32,9 @@ If you are reading this post with the intention of replicating what I have done,
 
 ## The Hardware
 
-I used on this guide a RPB 4 with 4GB of RAM as the server basis. It would be better to have used a RPB 5 with 8GB of RAM, or a RPB 4 with at least 8GB of RAM, however this was the hardware I had on hand now. In any case, the only thing necessary to later upgrade the setup with a RBP 4 to a RBP 5 is to swap one for the other.
+I used in this guide a RPB 4 with 4GB of RAM as the server basis. It would be better to have used a RPB 5 with 8GB of RAM, or a RPB 4 with at least 8GB of RAM, however this was the hardware I had on hand. In any case, the only thing necessary to later upgrade the setup with a RBP 4 to a RBP 5 is to swap one for the other.
 
-Despite the fact I started the whole process of installation with a SD card, it was not used for long, being replaced by a SSD drive soon later. Using a SSD as the main storage media for the server is mandatory. A SD card would not last long nor provide the necessary speed needed. Among several choices of external hard driver, I decided to use a 240GB SATA SSD with an USB to SATA adaptor. I got this particular model in the picture below.
+Despite the fact I started the whole process of installation with a SD card, it was not used for long, being replaced by a SSD drive straight away. Using a SSD as the main storage media for the server is mandatory; a SD card would not last long nor provide the necessary speed needed. Among several choices of external hard drives, I decided to use a 240GB SATA SSD with an USB to SATA adaptor. I got this particular model in the picture below.
 
 ![Sata to USB adaptor](/assets/images/ProxmoxInstalationOnRaspberryPi/SataToUsbCable.jpg)
 

@@ -16,7 +16,7 @@ timezone: America/Sao_Paulo
 
 title: Eduardo Foltran's notes # the main title
 
-tagline: Step by sptep how to do stuff # it will display as the sub-title
+tagline: Step by step how to do stuff # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
   Here i create some notes about things I have done and I want to keep a guide in case I have to do it again.
