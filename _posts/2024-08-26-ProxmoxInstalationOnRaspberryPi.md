@@ -123,6 +123,7 @@ After the system was loaded again I repeated the ```lsusb -t``` command with the
 Be aware that you may not need this correction at all. If you run the command ```lsusb -t``` and the driver is _usb-storage_, just ignore all I have done. If not, replace the ID, that in my case was **152d:0578**, with the one you find for your own device, that will be, most likely, a different one.
 
 ### Creating a bootable SSD
+#### Writing a new image
 
 Having now a reliably working RBP 4 I opened again the imager, this time on the Pi itself, and wrote the Lite version of Raspberry Pi OS on the SSD.
 
@@ -146,11 +147,15 @@ And again made the same modification, including ```usb-storage.quirks=152d:0578:
 sudo umount /mnt
 ```
 
-Then, I went back to the GUI for some deep dive into this new drive. I opened GParted, which I had installed previously, to make some modifications on the structure of the system. GParted asks for the user password to be opened. This is a kind of program that can cause a lot of damage if not used carefully and that is another good reason to create a new SD card with the only objective of creating this SSD. Fist I selected the correct drive I was going to edit, which was */dev/sda*.
+#### Ajusting partition sizes
+
+Then, I went back to the GUI for some deep dive into this new drive. This part of the process is completely optional. If you don't feel you need, or should, mess around with tools that can potentially wipe all your data, just jump to the next section.
+
+ I opened GParted, which I had installed previously, to make some modifications on the structure of the system. GParted asks for the user password to be opened. This is a kind of program that can cause a lot of damage if not used carefully and that is another good reason to create a new SD card with the only objective of creating this SSD. Fist I selected the correct drive I was going to edit, which was */dev/sda*.
 
 ![Selecting the partition on GParted](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted01.jpg)
 
-The first partition on the SSD is the boot one. It is 512MiB long but just a fraction of it is used. I am a person from the time when my whole computer had just 640k of RAM and the hard drive was only 30MiB long. The entire operating system with most applications could fit in a floppy disc of just 360k. Having a partition of half a gigabyte to use less than 40MiB of it is offensive to me. So, I adjusted it to a more appropriate size. I right clicked on the partition and chose Resize/Move.
+The first partition on the SSD is the boot one. It is 512MiB long but just a fraction of it is used. I am a person from the time when my whole computer had just 640k of RAM and the hard drive was only 30MiB long. The entire operating system with most applications could fit in a floppy disc of just 360k. Having a partition of half a gigabyte to use less than 100MiB of it is offensive to me. So, I adjusted it to a more appropriate size. I right clicked on the partition and chose Resize/Move.
 
 ![Start the resize operation](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted02.jpg)
 
@@ -166,13 +171,19 @@ As soon as I clicked Resize/Move I was greeted with this amicable warning.
 
 It was just GParted being silly. I was not moving a boot partition. The boot partition is the one I resized and this one is not a Windows partition. I knew I had nothing to worry about and just clicked OK.
 
+#### Creating a swap partition
+
 Following that, I focused my attention on the unallocated space at the end of the drive. I right clicked on it and chose New. First I changed the file system to linux-swap. On the New size box I wrote 4096MiB and used the mouse to drag it all the way to the end of the space.
 
 ![Adding a swap partition](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted06.jpg)
 
 Choosing the size of a swap partition is not an exact science. What I do is to set the size of the partition to the same size of the installed memory. That is where I compromise. Some people say it is too much, some say it is too little. If you think I should use a different amount, feel free to do it your way.
 
-Finely, I clicked on Apply All Operations, which is the little button with a green tick mark on it, to let GParted do its thing. I was again greeted with another silly message from GParted, being once more overprotective.
+Finely, I clicked on Apply All Operations, which is the little button with a green tick mark on it, to let GParted do its thing.
+
+![Applaying changes](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted06B.jpg)
+
+ I was again greeted with another silly message from GParted, being once more overprotective.
 
 ![Second warning from GParted](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted07.jpg)
 
@@ -180,8 +191,19 @@ I did not have nor would ever have a Windows system coexisting with Raspberry Pi
 
 ![Applying changes](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted08.jpg)
 
-The very last thing I did was to right click on the new swap partition and change its label to swap. Then I clicked OK and applied the changes once more.
+I then right clicked on the new swap partition and changed its label to swap, just because it is nice to give things a proper name.
 
 ![Changing the label of the new partition](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted09.jpg)
 
-All being done, I shot the system down, removed the SD card and powered it again for the first boot from my new drive.
+The very last thing I had to do was to expand the root partition. As it was not anymore the last partition on the disc, because I created a swap partition at the end of it, Raspberry Pi OS would not be able to resize it by itself. But that was an easy task. I just right clicked again on the root partition and chose _Resize/Move_.
+
+![Resizing the root partition](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted10.jpg)
+
+Then I dragged the right end of the partition until it filled all the available space.
+
+![Resizing the root partition](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted11.jpg)
+
+At last, I applied all changes again and shot the system down, removed the SD card and powered it again for the first boot from my new drive.
+
+### Booting from the SSD
+
