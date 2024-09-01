@@ -207,3 +207,163 @@ At last, I applied all changes again and shot the system down, removed the SD ca
 
 ### Booting from the SSD
 
+#### Setting up the swap partition
+
+It took a while, with several reboots and some configuration screens, but soon enough I had the system running. My first move was to put the swap partition to work. That was done by adding a line at the file /etc/fstab.
+
+```bash
+sudo nano /etc/fstab
+```
+
+At the end of the file, I added the following line, replacing XXXXXXXX by my SSD Part Unity Unique Id:
+
+```text
+PARTUUID=XXXXXXXX-03  none       swap    sw     0       0
+```
+
+The file ended up looking like this:
+
+```text
+proc            /proc           proc    defaults          0       0
+PARTUUID=d7d22d3c-01  /boot/firmware  vfat    defaults          0       2
+PARTUUID=d7d22d3c-02  /               ext4    defaults,noatime  0       1
+PARTUUID=d7d22d3c-03  none            swap    sw                0       0
+# a swapfile is not a swap partition, no line here
+#   use  dphys-swapfile swap[on|off]  for that
+```
+
+Then I saved and exited the editor. To put this new swap into operation I gave the command:
+
+```bash
+sudo swapon -a
+```
+
+That was it! In order to check it the partition was operational I run the command:
+
+```bash
+free -hw
+```
+
+#### Disabling the swap file
+
+As I had 4GiB of swap in a dedicated partition, I had no need for an extra swap file. Even less a tiny one as that which comes built in Raspberry Pi OS. In order to completely disable it, I run this commands:
+
+```bash
+sudo dphys-swapfile swapoff
+sudo dphys-swapfile uninstall
+sudo update-rc.d dphys-swapfile remove
+sudo apt -y purge dphys-swapfile
+```
+
+At this point I had the system in good shape and ready for its first update.
+
+´´´bash
+sudo apt update && sudo apt -y full-upgrade
+´´´
+
+I was finally ready to install Proxmox.
+
+## Installing Proxmox
+
+### But before it…
+
+The package ```qemu-utils``` is useful for some operations under Proxmox and is installed with it, but not complete. And after installing Proxmox, this package became property of Proxmox and the user is no longer able to add or remove parts of it. I discovered it the first time I installed Proxmox and later needed some of those utilities. When I tried to add them, I was presented with an error message. So, before I continue, let me install them.
+
+```bash
+sudo apt -y install qemu-utils
+```
+
+### Setting up the environment
+
+Now that I had all installed and the machine configured, it was time to go headless. I set my DHCP server to give my RBP 4 a fixed known IP address and continued all operations via SSH, following [this guide](https://pimylifeup.com/raspberry-pi-proxmox/). 
+
+After I logged in, I made sure ```curl``` was installed by the command:
+
+```bash
+apt list curl
+```
+
+Mine was installed, as it should in any distribution of Raspberry Pi OS. Next thing I made sure my /etc/hosts file was properly set. I named my machine _proxmoxserver_ and I had to add the IP I configured on the DHCP to the file.
+
+```bash
+sudo nano /etc/hosts
+```
+
+
+I edited it, adding a reference to _proxmoxserver_ on a new last line, including the version _proxmoxserver.lan_, that is how my local DNS treats machine naming:
+
+```text
+127.0.0.1       localhost
+::1             localhost ip6-localhost ip6-loopback
+ff02::1         ip6-allnodes
+ff02::2         ip6-allrouters
+
+127.0.1.1       proxmoxserver
+192.168.2.104   proxmoxserver proxmoxserver.lan
+```
+
+If your local DNS, that normally runs on your router, adds a different termination, as _.local_ or other domain, change it accordingly.
+
+### Creating a password for the **root** user
+
+To use Proxmox I need to login as the root user, so I had to configure its password first with the command:
+
+```bash
+sudo passwd root
+```
+
+I typed my password twice and that was done.
+
+### Adding the Proxmox Port Repository
+
+Proxmox is not officially supported on the RBP, but there is [this port](https://github.com/jiangcuo/Proxmox-Port) of it on Github that we can use, but first I had to add the keys for the repository with the commands:
+
+```bash
+curl -L https://mirrors.apqa.cn/proxmox/debian/pveport.gpg | sudo tee /usr/share/keyrings/pveport.gpg >/dev/null
+```
+
+Having the keys added, I appended the repository to the sources list:
+
+```bash
+echo "deb [arch=arm64 signed-by=/usr/share/keyrings/pveport.gpg] https://mirrors.apqa.cn/proxmox/debian/pve bookworm port" | sudo tee  /etc/apt/sources.list.d/pveport.list
+```
+
+It was time to update the system with the new repositories:
+
+```bash
+sudo apt update
+```
+
+And then I installed the last piece of software needed, that was _ifupdown2_, used by Proxmox to handle the network
+
+```bash
+sudo apt -y install ifupdown2
+```
+
+### Finally the install command
+
+It was a long way, but it was close to being finished. Finally I gave the command:
+
+```bash
+sudo apt install -y proxmox-ve postfix open-iscsi pve-edk2-firmware-aarch64
+```
+
+As soon as the command finished, it was now time to configure Proxmox. The first screen came about automatically and I used the arrow keys to choose the last option _Local only_.
+
+![Selecting the main configuration](/assets/images/ProxmoxInstalationOnRaspberryPi/ProxmoxConf01.jpg)
+
+Then it asked me about the domain name for mail. I left the name of my server there, as I have no intention of configuring a mail server on this installation.
+
+![Configuring mail server domain](/assets/images/ProxmoxInstalationOnRaspberryPi/ProxmoxConf02.jpg)
+
+Then I had to wait a bit more as the installation finished. It took about 3 minutes before I was greeted with another question:
+
+![Choose package maintainer](/assets/images/ProxmoxInstalationOnRaspberryPi/ProxmoxConf03.jpg)
+
+I chose Y to use the file provided for the package maintainer and that was it. I then opened my browser and navigated to the address https://<IP to my machine>:8006. Of course I had an alert provided by my browser, because the HTTPS certificate Proxmox uses is self signed, and that is a nono for any serious browser. However, this one is safe to ignore as the machine is sitting on my hack and only contains stuff I put there. I have no reason to mistrust my own intentions, and finally I had access to Proxmox login, where I entered the root password I configured before.
+
+![Login screen](/assets/images/ProxmoxInstalationOnRaspberryPi/ProxmoxConf04.jpg)
+
+And that was it. In my next post I will tell how I managed to create a virtual machine to run Raspberry Pi OS. In the meantime, I recommend you to watch the [excellent tutorial on Proxmox](https://www.youtube.com/watch?v=5j0Zb6x_hOk&list=PLT98CRl2KxKHnlbYhtABg6cF50bYa8Ulo) made by [Learn Linux TV](https://www.youtube.com/@LearnLinuxTV).
+
+
