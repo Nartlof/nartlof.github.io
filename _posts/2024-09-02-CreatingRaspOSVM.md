@@ -146,9 +146,9 @@ resize2fs /dev/sda2
 
 On a normal installation of RaspOS, the expansion and resizing of the file system is done automatically by the initialization script, but as I was not able to boot normally into RaspOS, those steps had to be done manually. Next I edited the _fstab_ file.
 
-´´´bash
+```bash
 nano /etc/fstab
-´´´
+```
 
 I then added to the end of the file this line:
 
