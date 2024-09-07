@@ -36,7 +36,7 @@ I used in this guide a RPB 4 with 4GB of RAM as the server basis. It would be be
 
 Despite the fact I started the whole process of installation with a SD card, it was not used for long, being replaced by a SSD drive straight away. Using a SSD as the main storage media for the server is mandatory; a SD card would not last long nor provide the necessary speed needed. Among several choices of external hard drives, I decided to use a 240GB SATA SSD with an USB to SATA adaptor. I got this particular model in the picture below.
 
-![Sata to USB adaptor](/assets/images/ProxmoxInstalationOnRaspberryPi/SataToUsbCable.jpg)
+![Sata to USB adaptor](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/SataToUsbCable.jpg)
 
 In summary, the hardware I was dealing with was:
 * Raspberry Pi 4 with 4GB of RAM
@@ -50,7 +50,7 @@ In summary, the hardware I was dealing with was:
 
 That was straightforward. I just open the latest version of Raspberry Pi Imager on my computer and copy the full version image with a desktop into the SD card. 
 
-![Writing Raspberry Pi OS on the SD card](/assets/images/ProxmoxInstalationOnRaspberryPi/ImagerFirstInstall.jpg)
+![Writing Raspberry Pi OS on the SD card](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/ImagerFirstInstall.jpg)
 
 If you already have an installed version of Raspberry Pi OS, this step is superfluous. I just did it because all my RBPs are in use for other purposes and I don't want to disturb them by installing software I am going to use just once. Moreover, there is one problem with the RBP 4 drivers that must be addressed before I install anything on the SSH. As I already solved it on my other RBPs, I needed this fresh installation to show it.
 
@@ -80,11 +80,11 @@ lsusb -t
 
 I had the following result:
 
-![Result of the lsusb command on a RBP 3](/assets/images/ProxmoxInstalationOnRaspberryPi/lsusb--t-rbp3.jpg)
+![Result of the lsusb command on a RBP 3](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/lsusb--t-rbp3.jpg)
 
 The SSD was identified as a mass storage device and the _usb-storage_  driver was attached to it. So far, so good. That is the expected behavior. On the other hand, if I gave the same command to the RBP 4 the result was different.
 
-![Result of the lsusb command on a RBP 4](/assets/images/ProxmoxInstalationOnRaspberryPi/lsusb--t-rbp4.jpg)
+![Result of the lsusb command on a RBP 4](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/lsusb--t-rbp4.jpg)
 
 Now the driver was _uas_. The SSD is identified as a mass storage device and the ‘usb-storage’ driver is attached to it. So far, so good. That is the expected behavior. On the other hand, if I gave the same command to the RBP 4 the result was different.
 
@@ -96,7 +96,7 @@ lsusb
 
 And there it was on the first line.
 
-![ID of the device 2 on bus 2](/assets/images/ProxmoxInstalationOnRaspberryPi/lsusb-rbp4.jpg)
+![ID of the device 2 on bus 2](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/lsusb-rbp4.jpg)
 
 Then I edited the file cmdline.txt to add the command ```usb-storage.quirks=152d:0578:u``` at the beginning.
 
@@ -118,7 +118,7 @@ sudo reboot
 
 After the system was loaded again I repeated the ```lsusb -t``` command with the expected result.
 
-![Result of the lsusb command on a RBP 4 after the usb-storage.quirks command](/assets/images/ProxmoxInstalationOnRaspberryPi/lsusb--t-rbp4B.jpg)
+![Result of the lsusb command on a RBP 4 after the usb-storage.quirks command](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/lsusb--t-rbp4B.jpg)
 
 Be aware that you may not need this correction at all. If you run the command ```lsusb -t``` and the driver is _usb-storage_, just ignore all I have done. If not, replace the ID, that in my case was **152d:0578**, with the one you find for your own device, that will be, most likely, a different one.
 
@@ -127,7 +127,7 @@ Be aware that you may not need this correction at all. If you run the command ``
 
 Having now a reliably working RBP 4 I opened again the imager, this time on the Pi itself, and wrote the Lite version of Raspberry Pi OS on the SSD.
 
-![Writing Raspberry Pi OS on the SSD](/assets/images/ProxmoxInstalationOnRaspberryPi/ImagerSecondInstall.jpg)
+![Writing Raspberry Pi OS on the SSD](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/ImagerSecondInstall.jpg)
 
 Once the process was finished, I opened a terminal window and mounted the boot partition on /mnt.
 
@@ -153,21 +153,21 @@ Then, I went back to the GUI for some deep dive into this new drive. This part o
 
  I opened GParted, which I had installed previously, to make some modifications on the structure of the system. GParted asks for the user password to be opened. This is a kind of program that can cause a lot of damage if not used carefully and that is another good reason to create a new SD card with the only objective of creating this SSD. Fist I selected the correct drive I was going to edit, which was */dev/sda*.
 
-![Selecting the partition on GParted](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted01.jpg)
+![Selecting the partition on GParted](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/Gparted01.jpg)
 
 The first partition on the SSD is the boot one. It is 512MiB long but just a fraction of it is used. I am a person from the time when my whole computer had just 640k of RAM and the hard drive was only 30MiB long. The entire operating system with most applications could fit in a floppy disc of just 360k. Having a partition of half a gigabyte to use less than 100MiB of it is offensive to me. So, I adjusted it to a more appropriate size. I right clicked on the partition and chose Resize/Move.
 
-![Start the resize operation](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted02.jpg)
+![Start the resize operation](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/Gparted02.jpg)
 
-![Finishing the resize operation](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted03.jpg)
+![Finishing the resize operation](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/Gparted03.jpg)
 
 On the new windows that opened I changed the size to 96MiB, which is still an overkill but frees more than 80% of the original space. Next I clicked on Resize/Move. It was time to put to use the space conquered. I right clicked on the second partition and again chose Resize/Move. This time I altered the space before the partition from 416MiB to zero and clicked Resize/Move.
 
-![Moving the second partition to the left](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted04.jpg)
+![Moving the second partition to the left](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/Gparted04.jpg)
 
 As soon as I clicked Resize/Move I was greeted with this amicable warning.
 
-![Warning from GParted](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted05.jpg)
+![Warning from GParted](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/Gparted05.jpg)
 
 It was just GParted being silly. I was not moving a boot partition. The boot partition is the one I resized and this one is not a Windows partition. I knew I had nothing to worry about and just clicked OK.
 
@@ -175,33 +175,33 @@ It was just GParted being silly. I was not moving a boot partition. The boot par
 
 Following that, I focused my attention on the unallocated space at the end of the drive. I right clicked on it and chose New. First I changed the file system to linux-swap. On the New size box I wrote 4096MiB and used the mouse to drag it all the way to the end of the space.
 
-![Adding a swap partition](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted06.jpg)
+![Adding a swap partition](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/Gparted06.jpg)
 
 Choosing the size of a swap partition is not an exact science. What I do is to set the size of the partition to the same size of the installed memory. That is where I compromise. Some people say it is too much, some say it is too little. If you think I should use a different amount, feel free to do it your way.
 
 Finely, I clicked on Apply All Operations, which is the little button with a green tick mark on it, to let GParted do its thing.
 
-![Applaying changes](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted06B.jpg)
+![Applaying changes](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/Gparted06B.jpg)
 
  I was again greeted with another silly message from GParted, being once more overprotective.
 
-![Second warning from GParted](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted07.jpg)
+![Second warning from GParted](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/Gparted07.jpg)
 
 I did not have nor would ever have a Windows system coexisting with Raspberry Pi OS, so this is another warning that was safe to ignore and click OK. The process finally started and soon enough it was concluded. 
 
-![Applying changes](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted08.jpg)
+![Applying changes](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/Gparted08.jpg)
 
 I then right clicked on the new swap partition and changed its label to swap, just because it is nice to give things a proper name.
 
-![Changing the label of the new partition](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted09.jpg)
+![Changing the label of the new partition](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/Gparted09.jpg)
 
 The very last thing I had to do was to expand the root partition. As it was not anymore the last partition on the disc, because I created a swap partition at the end of it, Raspberry Pi OS would not be able to resize it by itself. But that was an easy task. I just right clicked again on the root partition and chose _Resize/Move_.
 
-![Resizing the root partition](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted10.jpg)
+![Resizing the root partition](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/Gparted10.jpg)
 
 Then I dragged the right end of the partition until it filled all the available space.
 
-![Resizing the root partition](/assets/images/ProxmoxInstalationOnRaspberryPi/Gparted11.jpg)
+![Resizing the root partition](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/Gparted11.jpg)
 
 At last, I applied all changes again and shot the system down, removed the SD card and powered it again for the first boot from my new drive.
 
@@ -350,23 +350,23 @@ sudo apt install -y proxmox-ve postfix open-iscsi pve-edk2-firmware-aarch64
 
 As soon as the command finished, it was now time to configure Proxmox. The first screen came about automatically and I used the arrow keys to choose the last option _Local only_.
 
-![Selecting the main configuration](/assets/images/ProxmoxInstalationOnRaspberryPi/ProxmoxConf01.jpg)
+![Selecting the main configuration](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/ProxmoxConf01.jpg)
 
 Then it asked me about the domain name for mail. I left the name of my server there, as I have no intention of configuring a mail server on this installation.
 
-![Configuring mail server domain](/assets/images/ProxmoxInstalationOnRaspberryPi/ProxmoxConf02.jpg)
+![Configuring mail server domain](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/ProxmoxConf02.jpg)
 
 Then I had to wait a bit more as the installation finished. It took about 3 minutes before I was greeted with another question:
 
-![Choose package maintainer](/assets/images/ProxmoxInstalationOnRaspberryPi/ProxmoxConf03.jpg)
+![Choose package maintainer](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/ProxmoxConf03.jpg)
 
 I chose N to keep the file generated by the script. I then opened my browser and navigated to the address **```https://<IP to my machine>:8006```**. Of course I had an alert provided by my browser, because the HTTPS certificate Proxmox uses is self signed, and that is a nono for any serious browser. However, this one is safe to ignore as the machine is sitting on my hack and only contains stuff I put there. I have no reason to mistrust my own intentions, and finally I had access to Proxmox login, where I entered the root password I configured before.
 
-![Login screen](/assets/images/ProxmoxInstalationOnRaspberryPi/ProxmoxConf04.jpg)
+![Login screen](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/ProxmoxConf04.jpg)
 
 Once logged in, I checked the network connections for my server. Proxmox should create a virtual bridge by itself during installation, but this port for Raspberry Pi OS does not do that, so I created it myself. Under the _Network_ tab I clicked _Create_ and then _Linux Bridge_. Once the box came up, I filled in the IP address of my server and gateway, as well as the bridge port to use, eth0 in my case. Don’t forget to fill in the bridge port, or you may lose access to Proxmox web interface. Do not ask how I know it.
 
-![Creating the bridge](/assets/images/ProxmoxInstalationOnRaspberryPi/ProxmoxConf05.jpg)
+![Creating the bridge](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/ProxmoxConf05.jpg)
 
 And that was it. In my next post I will tell how I managed to create a virtual machine to run Raspberry Pi OS. In the meantime, I recommend you to watch the [excellent tutorial on Proxmox](https://www.youtube.com/watch?v=5j0Zb6x_hOk&list=PLT98CRl2KxKHnlbYhtABg6cF50bYa8Ulo) made by [Learn Linux TV](https://www.youtube.com/@LearnLinuxTV).
 

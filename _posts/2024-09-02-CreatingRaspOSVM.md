@@ -35,7 +35,7 @@ https://cdimage.debian.org/debian-cd/current/arm64/iso-cd/debian-12.7.0-arm64-ne
 
 On the Proxmox web interface I navigated to my local storage, clicked on ISO images, clicked on _Download fron URL_, past the link on the URL box, clicked on _Query URL_ and on _Download_. The download started and took about a minute to conclude.
 
-![Downloading Debian](/assets/images/RaspOSVM/DownloadDebian.jpg)
+![Downloading Debian](/assets/images/2024-09-02-CreatingRaspOSVM/DownloadDebian.jpg)
 
 The next and most important thing I needed was an image of RaspOS. I went for the lite version of Bookworm from [the official repository](https://www.raspberrypi.com/software/operating-systems/#raspberry-pi-os-64-bit). I believe the process should work also with other images, but as I was aiming for a small footprint VM, the smaller, the better. I connected my Proxmox server via SSH, created a directory called RaspOS on the home directory and downloaded the image to it. Those operations could be done on the web interface’s console tab, but I prefer SSH. The lettering is clearer to read and I can copy and paste commands as well.
 
@@ -74,19 +74,19 @@ rm 2024-07-04-raspios-bookworm-arm64-lite.img
 
 With all files on hand, I created a kind of sketch of a VM. I clicked on _Create VM_ and started to fill the boxes. I chose 200 for the ID of this machine and named it RaspOS.
 
-![Naming the VM](/assets/images/RaspOSVM/CreateMachine01.jpg)
+![Naming the VM](/assets/images/2024-09-02-CreatingRaspOSVM/CreateMachine01.jpg)
 
 On the OS tab I chose the Debian ISO image from the local storage.
 
-![Choosing the image](/assets/images/RaspOSVM/CreateMachine02.jpg)
+![Choosing the image](/assets/images/2024-09-02-CreatingRaspOSVM/CreateMachine02.jpg)
 
 Then I clicked _Next_ and at the _System_ tab I changed the BIOS type to OVMF and assigned EFI storage at the local drive in the QEMU format, leaving everything else at the default setting before clicking _Next_.
 
-![Setting the system](/assets/images/RaspOSVM/CreateMachine03.jpg)
+![Setting the system](/assets/images/2024-09-02-CreatingRaspOSVM/CreateMachine03.jpg)
 
 I deleted the disc Proxmox created by clicking on the little trash can icon. The proper disk would be created later at the command line.
 
-![No disc](/assets/images/RaspOSVM/CreateMachine04.jpg)
+![No disc](/assets/images/2024-09-02-CreatingRaspOSVM/CreateMachine04.jpg)
 
 Back at the command line, it was time to put in use the RaspOS image I downloaded and modified. To import it to the machine I just created, I gave the command:
 
@@ -98,7 +98,7 @@ Two important things to say about the line above are that 200 is the ID of the m
 
 After a few seconds, the disk was available as _Unused Disk 0_, so I selected it and clicked on _Edit_.
 
-![Disk available](/assets/images/RaspOSVM/CreateMachine05.jpg)
+![Disk available](/assets/images/2024-09-02-CreatingRaspOSVM/CreateMachine05.jpg)
 
 On the _Add: Unused Disk_ box I left all as default except for the  _Discard_ option that I set on. I did it because I am running Proxmox on an SSD. You should not enable it on an SD card.
 
@@ -110,17 +110,17 @@ There was just one last thing to do before starting the VM, that was to configur
 
 I clicked on the _Console_ tab on Proxmox web interface and started the machine. The boot went on throughout the ISO image of Debian attached as a CD drive. On the first menu, I chose _Advanced Options_.
 
-![Boot Debian Image](/assets/images/RaspOSVM/DebianBoot01.jpg)
+![Boot Debian Image](/assets/images/2024-09-02-CreatingRaspOSVM/DebianBoot01.jpg)
 
 On the second menu I selected _Rescue mode_ and from this point forward it does not really matter what one answers because it is just trying to configure the rescue environment. None of those choices would have permanent results, so I picked all defaults to speed up the process a bit.
 
-![Rescue mode](/assets/images/RaspOSVM/DebianBoot02.jpg)
+![Rescue mode](/assets/images/2024-09-02-CreatingRaspOSVM/DebianBoot02.jpg)
 
 I stopped when I reached the _Rescue mode_ screen, where I picked the option _/dev/sda2_.
 
-![Choose partition](/assets/images/RaspOSVM/DebianBoot03.jpg)
+![Choose partition](/assets/images/2024-09-02-CreatingRaspOSVM/DebianBoot03.jpg)
 
-![Execute shell](/assets/images/RaspOSVM/DebianBoot04.jpg)
+![Execute shell](/assets/images/2024-09-02-CreatingRaspOSVM/DebianBoot04.jpg)
 
 I then selected _Execute a shell in /dev/sda2_ and run the following commands:
 
@@ -134,7 +134,7 @@ exit
 
 Those were to expand the file system to fill all available space I left for it. Then I chose on the menu to reboot the machine.
 
-![Reboot](/assets/images/RaspOSVM/DebianBoot05.jpg)
+![Reboot](/assets/images/2024-09-02-CreatingRaspOSVM/DebianBoot05.jpg)
 
 ### Second boot
 
@@ -205,22 +205,22 @@ update-grub2
 
 All done, I typed _exit_ on the terminal and stopped the VM. I needed to change the boot order to finally load the system properly. On the _Options_ tab and changed the boot order by dragging the SCSI0 drive to the top of the list.
 
-![Boot order](/assets/images/RaspOSVM/BootOrder01.jpg)
+![Boot order](/assets/images/2024-09-02-CreatingRaspOSVM/BootOrder01.jpg)
 
 On the _Hardware_ tab, I clicked on the CD drive and chose the _No Media_ option.
 
-![No media](/assets/images/RaspOSVM/NoMedia01.jpg)
+![No media](/assets/images/2024-09-02-CreatingRaspOSVM/NoMedia01.jpg)
 
 ### Booting into Raspberry Pi OS
 
 All was set to boot into RaspOS for the first time, but I cloned the machine before starting it to preserve this VM in this particular state, as I knew I would need it for my next post, when I optimize this installation.
 
-![Clone menu](/assets/images/RaspOSVM/CloneVM01.jpg)
+![Clone menu](/assets/images/2024-09-02-CreatingRaspOSVM/CloneVM01.jpg)
 
-![Clone dialog](/assets/images/RaspOSVM/CloneVM02.jpg)
+![Clone dialog](/assets/images/2024-09-02-CreatingRaspOSVM/CloneVM02.jpg)
 
 I then started the VM and very soon I was greeted with the first of many configuration screens for RaspOS, that I filled one by one to create my system. From now on it is just a case of do as always. 
 
-![First Boot](/assets/images/RaspOSVM/FirstBoot.jpg)
+![First Boot](/assets/images/2024-09-02-CreatingRaspOSVM/FirstBoot.jpg)
 
  As soon as I got a prompt, I changes the machine name, enabled SSH and auto login and that was it. In the next post I will use this VM to optimize the one I left cloned.
