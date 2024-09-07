@@ -223,4 +223,4 @@ I then started the VM and very soon I was greeted with the first of many configu
 
 ![First Boot](/assets/images/2024-09-02-CreatingRaspOSVM/FirstBoot.jpg)
 
- As soon as I got a prompt, I changes the machine name, enabled SSH and auto login and that was it. In the next post I will use this VM to optimize the one I left cloned.
+ As soon as I got a prompt, I changes the machine name, enabled SSH and auto login and that was it. [In the next post({% post_url 2024-09-07-ImprouvingRaspOSVM %}) I will use this VM to optimize the one I left cloned.
