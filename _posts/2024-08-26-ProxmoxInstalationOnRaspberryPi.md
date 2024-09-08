@@ -215,7 +215,7 @@ It took a while, with several reboots and some configuration screens, but soon e
 sudo nano /etc/fstab
 ```
 
-At the end of the file, I added the following line, replacing XXXXXXXX by my SSD Part Unity Unique Id:
+At the end of the file, I added the following line, replacing XXXXXXXX by my SSD Part Unique Universal Identifier:
 
 ```text
 PARTUUID=XXXXXXXX-03  none       swap    sw     0       0
