@@ -1,4 +1,5 @@
 ---
+author: Carlos Eduardo Foltran
 title: How to improuve the Raspberry Pi OS image for a virtual machine
 date: 2024-09-07 16:11:00 -0300
 categories: [proxmox, raspberry pi]
@@ -8,8 +9,6 @@ tags: [proxmox, raspbian, raspos, homeserver, virtual machine]
 ## Introduction
 
 ### Why?
-
-Adding a new line
 
 At the introduction of [my previous post]({% post_url 2024-09-02-CreatingRaspOSVM %}) I discussed some of the issues Raspberry Pi OS (RaspOS) has in regard of being used in a Virtual Machine (VM). The only real advantage of using such a system is the support one can get from the community. If you find a problem, someone, somewhere beyond the sea is there waiting to help you. The same is not true with Ubuntu for instance. A silly question put on a Ubuntu forum will be ignored or answered with a "buy a better equipment" or "use the proper software". Well, we don’t have and neither wish to have any equipment more expensive than ours Raspberry Pis (RBP) nor can run another thing comfortably on the RBP.
 
