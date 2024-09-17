@@ -9,7 +9,7 @@ tags: [proxmox, raspbian, raspos, homeserver, virtual machine]
 
 ### Why?
 
-At the introduction of <!--[my previous post]({% post_url 2024-09-02-CreatingRaspOSVM %})--> I discussed some of the issues Raspberry Pi OS (RaspOS) has in regard of being used in a Virtual Machine (VM). The only real advantage of using such a system is the support one can get from the community. If you find a problem, someone, somewhere beyond the sea is there waiting to help you. The same is not true with Ubuntu for instance. A silly question put on a Ubuntu forum will be ignored or answered with a "buy a better equipment" or "use the proper software". Well, we don’t have and neither wish to have any equipment more expensive than ours Raspberry Pis (RBP) nor can run another thing comfortably on the RBP.
+At the introduction of [my previous post]({% post_url 2024-09-02-CreatingRaspOSVM %}) I discussed some of the issues Raspberry Pi OS (RaspOS) has in regard of being used in a Virtual Machine (VM). The only real advantage of using such a system is the support one can get from the community. If you find a problem, someone, somewhere beyond the sea is there waiting to help you. The same is not true with Ubuntu for instance. A silly question put on a Ubuntu forum will be ignored or answered with a "buy a better equipment" or "use the proper software". Well, we don’t have and neither wish to have any equipment more expensive than ours Raspberry Pis (RBP) nor can run another thing comfortably on the RBP.
 
 Moreover, a RBP 4 or 5 is more than enough to run anything one may need in a homelab or homeserver. Actually, I managed to run all my stuff on a Lattepanda V1 plus a RBP 3B+. However, the resources one can have from such hardware are limited. Once committed to this kind of equipment, one must be wise on how to spend one’s GiBs and GFLOPS. 
 
@@ -21,7 +21,7 @@ That is completely on you. If you are comfortable spending 4GiB for each VM you 
 
 ### Things I assume you already know
 
-I hope you have read all my previous posts, starting on <!--[this one]({% post_url 2024-08-26-ProxmoxInstalationOnRaspberryPi %})-->, on this series and already know all the stuff I mentioned previously. If you got all that, you are good to go
+I hope you have read all my previous posts, starting on [this one]({% post_url 2024-08-26-ProxmoxInstalationOnRaspberryPi %}), on this series and already know all the stuff I mentioned previously. If you got all that, you are good to go
 
 ## Preparing the tools I needed
 
@@ -29,11 +29,11 @@ I hope you have read all my previous posts, starting on <!--[this one]({% post_u
 
 So far, I had two VMs on my Proxmox server, clones of each other, one fully configured, with ID 200, and other stopped at the first boot, with ID 300. For simplicity, I will refer to them as VM200 and VM300. The idea I had was to use VM200 to edit the disk of VM300 in a similar manner I did with the SSD I installed Proxmox. For that, I needed to install _GParted_, but in order to proper run it I needed a desktop environment. However, to install a desktop environment I needed more space. And here is the main reason I took my time to do all this partition manipulation; increasing the size of a disk in Proxmox is very easy, but reducing it is not. Then I started by selecting the _Hardware_ tab of the VM200, selecting the hard disk and, on the _Disk Action_ menu, I picked _Resize_.
 
-<!--![Resize menu](/assets/images/2024-09-07-ImprouvingRaspOSVM/Resize01.jpg)-->
+![Resize menu](/assets/images/2024-09-07-ImprouvingRaspOSVM/Resize01.jpg)
 
 I clicked on it and the dialog box popped up allowing me to tell how much space I wanted. I increased it by 2GiB, which should be enough.
 
-<!--![Resize dialog box](/assets/images/2024-09-07-ImprouvingRaspOSVM/Resize02.jpg)-->
+![Resize dialog box](/assets/images/2024-09-07-ImprouvingRaspOSVM/Resize02.jpg)
 
 In a few seconds the disk was resized to 6GiB. Then I went to the console and typed:
 
@@ -59,7 +59,7 @@ sudo apt -y install raspberrypi-ui-mods
 
 Once installed, I ran ```sudo raspi-config``` again, navigated to _System Options_ > _Boot / Auto Login_ and I chose the _Desktop Autologin_ option. I was prompted to reboot the machine and, about a minute later, I had a Pixel desktop on my Proxmox console for VM200.
 
-<!--![Pixel desktop](/assets/images/2024-09-07-ImprouvingRaspOSVM/PixelDesktop01.jpg)-->
+![Pixel desktop](/assets/images/2024-09-07-ImprouvingRaspOSVM/PixelDesktop01.jpg)
 
 I opened a terminal and gave the command to install _GParted_, the same from the first post on this series.
 
@@ -73,7 +73,7 @@ sudo apt -y install gparted mtools
 
 Now was the time to be safe. Before I did anything else, I went to the _Snapshot_ tab and took a snapshot of the current state of VM200. _GParted_ is a powerful and dangerous tool to play with. It is alarmingly easy to mess with the system while using it.
 
-<!--![Snapshot](/assets/images/2024-09-07-ImprouvingRaspOSVM/Snapshot01.jpg)-->
+![Snapshot](/assets/images/2024-09-07-ImprouvingRaspOSVM/Snapshot01.jpg)
 
 I also cloned VM300 again to have a copy of the hard disk I intended to edit. I could also make a backup of VM300, but cloning was faster. 
 
@@ -81,15 +81,15 @@ I also cloned VM300 again to have a copy of the hard disk I intended to edit. I 
 
 Next I detached the hard drive from VM300 by clicking on the _Hardware_ tab, selecting the drive and clicking on the _Detach_ button.
 
-<!--![Detaching the hard drive from VM300](/assets/images/2024-09-07-ImprouvingRaspOSVM/Detaching01.jpg)-->
+![Detaching the hard drive from VM300](/assets/images/2024-09-07-ImprouvingRaspOSVM/Detaching01.jpg)
 
 I then selected the now _Unused Disk 0_ and on the _Disk Action_ menu I clicked on _Reassign Owner_.
 
-<!--![Reassign the disk](/assets/images/2024-09-07-ImprouvingRaspOSVM/ReassignDisk02.jpg)-->
+![Reassign the disk](/assets/images/2024-09-07-ImprouvingRaspOSVM/ReassignDisk02.jpg)
 
 Soon enough the disk was available on VM200 and I checked it with the ```lsblk``` command.
 
-<!--![Listing devices](/assets/images/2024-09-07-ImprouvingRaspOSVM/ReassignDisk03.jpg)-->
+![Listing devices](/assets/images/2024-09-07-ImprouvingRaspOSVM/ReassignDisk03.jpg)
 
 From this point forward I had to be extra careful. As VM200 and VM300 are clones of each other, bolt disks have the same UUID. The ```sudo blkid``` command makes it obvious.
 
@@ -127,19 +127,19 @@ After those commands have finished, a new run of ```df -h | grep "/dev/sdb"``` s
 
 Everything was set to create the new disk to accommodate the system. I started by adding one more hard drive to VM200, by clicking on the _Add_ menu and choosing _Hard Disk_. I configured it to have 2.5GiB and be stored at the local storage.
 
-<!--![Creating the new disk](/assets/images/2024-09-07-ImprouvingRaspOSVM/CreateNewDisk01.jpg)-->
+![Creating the new disk](/assets/images/2024-09-07-ImprouvingRaspOSVM/CreateNewDisk01.jpg)
 
 I had then a new disk of 2.5GiB connected at _/dev/sdc_. It was time to play with fire, I mean, with _GParted_. I selected the appropriate device and was presented with a completely blank disk. I began by creating a partition table by clicking on the menu _Device -> Create Partition Table_. I chose the default _msdos_ partition type, as it is the same type of disk from VM300.
 
-<!--![Empty disk](/assets/images/2024-09-07-ImprouvingRaspOSVM/GParted02.jpg)-->
+![Empty disk](/assets/images/2024-09-07-ImprouvingRaspOSVM/GParted02.jpg)
 
 Next I right clicked on the unallocated space and chose _New_ on the menu. On the dialog box that opened I set the size to 16MiB, file system to _fat16_, labeled it _bootfs_ and clicked _Add_.
 
-<!--![Creating boot partition](/assets/images/2024-09-07-ImprouvingRaspOSVM/GParted04.jpg)-->
+![Creating boot partition](/assets/images/2024-09-07-ImprouvingRaspOSVM/GParted04.jpg)
 
 Then I right clicked again on the unallocated space and created the _rootfs_ partition. I kept all the defaults and only changed the label to _rootfs_.
 
-<!--![Creating root partition](/assets/images/2024-09-07-ImprouvingRaspOSVM/GParted04.jpg)-->
+![Creating root partition](/assets/images/2024-09-07-ImprouvingRaspOSVM/GParted04.jpg)
 
 I applied all changes and that was the end of the nice part. Next I had to deal with the command line to make deeper changes on the new disk. I closed _Gparted_ and went back to the terminal. I had to use the _tune2fs_ and _mkdosfs_ commands to set the UUID of the partitions to match those of the original disk. First I gave the command ```sudo blkid```.
 
@@ -197,11 +197,11 @@ sudo cp -a /mnt/VM300/* /mnt/NewDisk/
 
 The easiest way to release the new disk from VM200 is to shutdown the VM. This will unmount the volume and allow the detachment and transferring of the disk. Once VM200 was stopped, I selected the disk of 2.5GiB and clicked on _Disk Action_ followed by _Reassign Owner_.
 
-<!--![Reassign menu](/assets/images/2024-09-07-ImprouvingRaspOSVM/ReassignDisk04.jpg)-->
+![Reassign menu](/assets/images/2024-09-07-ImprouvingRaspOSVM/ReassignDisk04.jpg)
 
 In the dialog box that appeared I selected VM300 and clicked _Reassign Disk_.
 
-<!--![Reassign Disk](/assets/images/2024-09-07-ImprouvingRaspOSVM/ReassignDisk05.jpg)-->
+![Reassign Disk](/assets/images/2024-09-07-ImprouvingRaspOSVM/ReassignDisk05.jpg)
 
 And before I started VM200 again, I detached the 4GiB disk. As it has the same PARTUUID and UUID as the machine’s disk, the boot process would be messy if I left it there.
 
@@ -211,11 +211,11 @@ And before I started VM200 again, I detached the 4GiB disk. As it has the same P
 
 As I had detached the disk from VM300, now that it was back I had to reconfigure some details. First I went to the _Options_ tab and changed the boot order. I put the CD ROM as the first boot option and the disk as the second one, after enabling it, and clicked OK.
 
-<!--![Boot order](/assets/images/2024-09-07-ImprouvingRaspOSVM/RecreatingBoot01.jpg)-->
+![Boot order](/assets/images/2024-09-07-ImprouvingRaspOSVM/RecreatingBoot01.jpg)
 
 Then I clicked on the _Hardware_ tab, selected the CD/DVD drive and clicked on _Edit_. I configured the Debian ISO as media and clicked OK.
 
-<!--![Configuring the CD ROM](/assets/images/2024-09-07-ImprouvingRaspOSVM/RecreatingBoot02.jpg)-->
+![Configuring the CD ROM](/assets/images/2024-09-07-ImprouvingRaspOSVM/RecreatingBoot02.jpg)
 
 That done, I started the machine and waited for the menu to appear. From this point onward I practically repeated the process from the last post, but skipping some steps that didn’t need to be redone. On the CD menu I chose _Advanced options_, _Rescue mode_, hit enter for all the default values until the menu for choosing the device to use as root file system, for which I picked _/dev/sda2/_ and on the following screen I chose to _Execute a shell in /dev/sda2_. On the prompt I then gave the following commands:
 
