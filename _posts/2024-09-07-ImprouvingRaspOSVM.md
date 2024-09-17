@@ -9,7 +9,7 @@ tags: [proxmox, raspbian, raspos, homeserver, virtual machine]
 
 ### Why?
 
-At the introduction of my previous post I discussed some of the issues Raspberry Pi OS (RaspOS) has in regard of being used in a Virtual Machine (VM). The only real advantage of using such a system is the support one can get from the community. If you find a problem, someone, somewhere beyond the sea is there waiting to help you. The same is not true with Ubuntu for instance. A silly question put on a Ubuntu forum will be ignored or answered with a "buy a better equipment" or "use the proper software". Well, we don’t have and neither wish to have any equipment more expensive than ours Raspberry Pis (RBP) nor can run another thing comfortably on the RBP.
+At the introduction of [my previous post]({% post_url 2024-09-02-CreatingRaspOSVM %}) I discussed some of the issues Raspberry Pi OS (RaspOS) has in regard of being used in a Virtual Machine (VM). The only real advantage of using such a system is the support one can get from the community. If you find a problem, someone, somewhere beyond the sea is there waiting to help you. The same is not true with Ubuntu for instance. A silly question put on a Ubuntu forum will be ignored or answered with a "buy a better equipment" or "use the proper software". Well, we don’t have and neither wish to have any equipment more expensive than ours Raspberry Pis (RBP) nor can run another thing comfortably on the RBP.
 
 Moreover, a RBP 4 or 5 is more than enough to run anything one may need in a homelab or homeserver. Actually, I managed to run all my stuff on a Lattepanda V1 plus a RBP 3B+. However, the resources one can have from such hardware are limited. Once committed to this kind of equipment, one must be wise on how to spend one’s GiBs and GFLOPS. 
 
@@ -21,7 +21,7 @@ That is completely on you. If you are comfortable spending 4GiB for each VM you 
 
 ### Things I assume you already know
 
-I hope you have read all my previous posts, starting on this one, on this series and already know all the stuff I mentioned previously. If you got all that, you are good to go
+I hope you have read all my previous posts, starting on [this one]({% post_url 2024-08-26-ProxmoxInstalationOnRaspberryPi %}), on this series and already know all the stuff I mentioned previously. If you got all that, you are good to go
 
 ## Preparing the tools I needed
 
@@ -29,7 +29,7 @@ I hope you have read all my previous posts, starting on this one, on this series
 
 So far, I had two VMs on my Proxmox server, clones of each other, one fully configured, with ID 200, and other stopped at the first boot, with ID 300. For simplicity, I will refer to them as VM200 and VM300. The idea I had was to use VM200 to edit the disk of VM300 in a similar manner I did with the SSD I installed Proxmox. For that, I needed to install _GParted_, but in order to proper run it I needed a desktop environment. However, to install a desktop environment I needed more space. And here is the main reason I took my time to do all this partition manipulation; increasing the size of a disk in Proxmox is very easy, but reducing it is not. Then I started by selecting the _Hardware_ tab of the VM200, selecting the hard disk and, on the _Disk Action_ menu, I picked _Resize_.
 
-![Resize menu](/assets/images/2024-09-07-ImprouvingRaspOSVM/Resize01.jpg)
+<!--![Resize menu](/assets/images/2024-09-07-ImprouvingRaspOSVM/Resize01.jpg)-->
 
 I clicked on it and the dialog box popped up allowing me to tell how much space I wanted. I increased it by 2GiB, which should be enough.
 
