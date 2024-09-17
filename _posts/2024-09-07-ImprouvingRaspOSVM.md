@@ -110,7 +110,7 @@ sudo mount /dev/sdb1 /mnt/VM300/boot/firmware/
 
 With the disk properly mounted, I ran the command ```df -h | grep "/dev/sdb"``` to check how much space is needed to hold the image. The result showed that from the 4GiB required to install RaspOS more than 1.5GiB are unused. The situation on the _bootfs_ partition was even worse, because despite 30MiB being used, most of it was left over files that are used only to boot RaspOS on the original hardware. 
 
-[Size needed]()
+[Size needed](/assets/images/2024-09-07-ImprouvingRaspOSVM/SizeNeeded01.jpg)
 
 First thing to do is to delete everything from the _/boot/firmware/_ directory that was not inside the _/boot/firmware/EFI/_ directory. So, I gave the command:
 
