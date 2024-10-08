@@ -257,9 +257,9 @@ sudo apt -y purge dphys-swapfile
 
 At this point I had the system in good shape and ready for its first update.
 
-´´´bash
+```bash
 sudo apt update && sudo apt -y full-upgrade
-´´´
+```
 
 I was finally ready to install Proxmox.
 
@@ -368,4 +368,4 @@ Once logged in, I checked the network connections for my server. Proxmox should 
 
 ![Creating the bridge](/assets/images/2024-08-26-ProxmoxInstalationOnRaspberryPi/ProxmoxConf05.jpg)
 
-And that was it. [In my next post]({% post_url 2024-08-26-ProxmoxInstalationOnRaspberryPi %}) I will tell how I managed to create a virtual machine to run Raspberry Pi OS. In the meantime, I recommend you to watch the [excellent tutorial on Proxmox](https://www.youtube.com/watch?v=5j0Zb6x_hOk&list=PLT98CRl2KxKHnlbYhtABg6cF50bYa8Ulo) made by [Learn Linux TV](https://www.youtube.com/@LearnLinuxTV).
+And that was it. [In my next post]({% post_url 2024-09-02-CreatingRaspOSVM %}) I will tell how I managed to create a virtual machine to run Raspberry Pi OS. In the meantime, I recommend you to watch the [excellent tutorial on Proxmox](https://www.youtube.com/watch?v=5j0Zb6x_hOk&list=PLT98CRl2KxKHnlbYhtABg6cF50bYa8Ulo) made by [Learn Linux TV](https://www.youtube.com/@LearnLinuxTV).
