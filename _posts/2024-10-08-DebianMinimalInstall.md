@@ -71,7 +71,7 @@ I selected the only disk available and started the process:
 
 As soon as I pressed _Enter_ I was greeted with a warning asking if I knew what I was doing, and I said _Yes_! I then selected the free space, hit _Enter_ and chose _Create a new partition on the menu presented.
 
-![Resize menu](/assets/images/2024-10-08-DebianMinimalInstall/InstallDebian5.jpg)
+![Resize menu](/assets/images/2024-10-08-DebianMinimalInstall/InstallDebian05.jpg)
 
 This first partition was the _bootfs_ and I selected only 40MiB for it and placed it at the beginning of the disk when asked. Only 6MiB of this partition will be used, but every time I tried to make it even smaller, the system refused to start.
 
