@@ -133,9 +133,11 @@ I had then a new disk of 2.5GiB connected at _/dev/sdc_. It was time to play wit
 
 ![Empty disk](/assets/images/2024-09-07-ImprouvingRaspOSVM/GParted02.jpg)
 
-Next I right clicked on the unallocated space and chose _New_ on the menu. On the dialog box that opened I set the size to 16MiB, file system to _fat16_, labeled it _bootfs_ and clicked _Add_.
+Next I right clicked on the unallocated space and chose _New_ on the menu. On the dialog box that opened I set the size to 64MiB, file system to _fat32_, labeled it _bootfs_ and clicked _Add_.
 
-![Creating boot partition](/assets/images/2024-09-07-ImprouvingRaspOSVM/GParted04.jpg)
+![Creating boot partition](/assets/images/2024-09-07-ImprouvingRaspOSVM/GParted03.jpg)
+
+Only 6MiB will be effectively used on the _bootfs_ partition, and if I made it to that size the machine would boot perfectly. However, on updates, Raspberry Pi OS will write new drivers to that partition and if there were not enough space, the update would fail. So, keep it in mind; if for some reason you have a VM that you do not intend to update __EVER__, you could use a smaller _bootfs_.
 
 Then I right clicked again on the unallocated space and created the _rootfs_ partition. I kept all the defaults and only changed the label to _rootfs_.
 
