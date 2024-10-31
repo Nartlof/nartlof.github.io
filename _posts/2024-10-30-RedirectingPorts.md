@@ -26,17 +26,17 @@ sudo apt update && sudo apt -y upgrade && sudo apt install iptables
 Let's say we have an application listening to port 9091 and we what it on port 80; we just need to give the command:
 
 ```bash
-iptables -A INPUT -i eth0 -p tcp --dport 80 -j ACCEPT
-iptables -A INPUT -i eth0 -p tcp --dport 9091 -j ACCEPT
-iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 9091
+sudo iptables -A INPUT -i eth0 -p tcp --dport 80 -j ACCEPT
+sudo iptables -A INPUT -i eth0 -p tcp --dport 9091 -j ACCEPT
+sudo iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 9091
 ```
 
 And, for IPv6
 
 ```bash
-ip6tables -A INPUT -i eth0 -p tcp --dport 80 -j ACCEPT
-ip6tables -A INPUT -i eth0 -p tcp --dport 9091 -j ACCEPT
-ip6tables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 9091
+sudo ip6tables -A INPUT -i eth0 -p tcp --dport 80 -j ACCEPT
+sudo ip6tables -A INPUT -i eth0 -p tcp --dport 9091 -j ACCEPT
+sudo ip6tables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 9091
 ```
 
 And that is it. The application can now be reached from port 80 and also 9091. The main advantage of this method is to keep the default port opened.
@@ -56,12 +56,12 @@ During installation it will ask if the present rules should be saved, so it is a
 The rules are saved on ```/etc/iptables/rules.v4``` and ```/etc/iptables/rules.v6```. One can edit those files but a better approach is just create any new rule you want with ```iptables``` command and then saving them with:
 
 ```bash
-sudo iptables-save > /etc/iptables/rules.v4
+sudo su -c 'iptables-save > /etc/iptables/rules.v4'
 ```
 
 or, in case of IPv6 rules:
 
 ```bash
-sudo ip6tables-save > /etc/iptables/rules.v6
+sudo su -c 'ip6tables-save > /etc/iptables/rules.v6'
 ```
 
