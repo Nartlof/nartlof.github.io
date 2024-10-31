@@ -1,7 +1,7 @@
 ---
 title: How to activate Windows if you lost your key
 date: 2024-08-01 09:37:00 -0300
-categories: [windows, activation, quick note]
+categories: [quick note, windows, activation]
 tags: [windows, ome, key, activate]
 ---
 

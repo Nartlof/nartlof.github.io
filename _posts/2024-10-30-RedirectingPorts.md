@@ -1,7 +1,7 @@
 ---
 title: Redirecting ports on Raspberry Pi OS
 date: 2024-10-30 10:04:00 -0300
-categories: [raspberry pi, debian, quick note]
+categories: [quick note, raspberry pi, debian]
 tags: [iptables, redirection, linux, raspbian]
 ---
 
