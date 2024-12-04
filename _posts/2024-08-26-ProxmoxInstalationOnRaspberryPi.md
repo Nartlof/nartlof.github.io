@@ -255,6 +255,12 @@ sudo update-rc.d dphys-swapfile remove
 sudo apt -y purge dphys-swapfile
 ```
 
+When installed, Proxmox is going to manage all network connections, for itself, VMs and containers. During the tests I have done, I saw it fighting a lot with ```network-manager```, so I removed it in order to let Proxmox do its work in peace.
+
+```bash
+sudo apt -y remove network-manager
+```
+
 At this point I had the system in good shape and ready for its first update.
 
 ```bash
