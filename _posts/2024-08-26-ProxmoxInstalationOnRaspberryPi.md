@@ -351,7 +351,7 @@ iface eth0 inet manual
 
 auto vmbr0
 iface vmbr0 inet static
-        address 192.168.2.104/24
+        address 192.168.2.104/22
         gateway 192.168.1.1
         bridge-ports eth0
         bridge-stp off
